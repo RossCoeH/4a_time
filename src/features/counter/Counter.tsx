@@ -8,11 +8,13 @@ import {
   incrementAsync,
   incrementIfOdd,
   selectCount,
+  selectCountPlusNum,
 } from './counterSlice';
 import styles from './Counter.module.css';
 
 export function Counter() {
   const count = useAppSelector(selectCount);
+  console.log('Count + 5 = ',useAppSelector<number|undefined>(state=>selectCountPlusNum(state,5)))
   const dispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
 

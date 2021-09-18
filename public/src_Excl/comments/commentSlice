@@ -1,0 +1,54 @@
+import {createSlice,createEntityAdapter,createAsyncThunk} from '@reduxjs/toolkit'
+
+// The function below is called a thunk and allows us to perform async logic. It
+// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
+// will call the thunk with the `dispatch` function as the first argument. Async
+// code can then be executed and other actions can be dispatched. Thunks are
+// typically used to make async requests.
+// export const incrementAsync = createAsyncThunk(
+//   'counter/fetchCount',
+//   async (amount: number) => {
+//     const response = await fetchComments(amount);
+//     // The value we return becomes the `fulfilled` action payload
+//     return response.json;
+//   }
+// );
+
+interface comment{
+  postId:string,
+  id:string,
+  name:string,
+  body:string
+}
+
+export const fetchComments=(amount:number) => createAsyncThunk(
+  'comments/fetchComments',
+  async(_,{dispatch})=>{
+    const data:Promise<comment> = fetch(
+      `https://jsonplaceholder.typicode.com/comments? limit=10`
+      ).then(
+      (res)=> res.json())
+        console.log(`Fetch Comment data`, data)
+         dispatch(commentsSetAll(data)
+         )
+
+ 
+
+const commentsAdapter= createEntityAdapter({
+  selectId:(comment)=>comment.id
+})
+
+const commentSlice = createSlice({
+name:'comments',
+initialState:commentsAdapter.getInitialState(),
+reducers:{
+commentsSetAll:commentsAdapter.setAll
+},
+extraReducers:{
+
+}
+})
+
+export const {commentsSetAll}=commentSlice.actions
+
+export default commentSlice
